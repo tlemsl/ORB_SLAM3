@@ -429,12 +429,12 @@ void Frame::ExtractORB(int flag, const cv::Mat &im, const int x0, const int x1)
         monoLeft = (*mpORBextractorLeft)(im,cv::Mat(),mvKeys,mDescriptors,vLapping);
     else
         monoRight = (*mpORBextractorRight)(im,cv::Mat(),mvKeysRight,mDescriptorsRight,vLapping);
-    // Visualize keypoints
-    if (flag == 0) {
-        visualizeKeypoints(im, mvKeys, "Left Image Keypoints");
-    } else {
-        visualizeKeypoints(im, mvKeysRight, "Right Image Keypoints");
-    }
+    // // Visualize keypoints
+    // if (flag == 0) {
+    //     visualizeKeypoints(im, mvKeys, "Left Image Keypoints");
+    // } else {
+    //     visualizeKeypoints(im, mvKeysRight, "Right Image Keypoints");
+    // }
 }
 
 bool Frame::isSet() const {

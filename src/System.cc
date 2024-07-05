@@ -1426,6 +1426,7 @@ void System::SaveAtlas(int type){
             oa << strVocabularyName;
             oa << strVocabularyChecksum;
             oa << mpAtlas;
+            ofs.flush();
             cout << "End to write the save text file" << endl;
         }
         else if(type == BINARY_FILE) // File binary
@@ -1437,6 +1438,7 @@ void System::SaveAtlas(int type){
             oa << strVocabularyName;
             oa << strVocabularyChecksum;
             oa << mpAtlas;
+            ofs.flush();
             cout << "End to write save binary file" << endl;
         }
     }
