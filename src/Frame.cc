@@ -414,6 +414,13 @@ void Frame::AssignFeaturesToGrid()
         }
     }
 }
+void visualizeKeypoints(const cv::Mat& image, const std::vector<cv::KeyPoint>& keypoints, const std::string& windowName) {
+    cv::Mat outputImage;
+    cv::drawKeypoints(image, keypoints, outputImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
+    cv::imshow(windowName, outputImage);
+    // Wait for a key press before closing the windows
+    cv::waitKey(1);
+}
 
 void Frame::ExtractORB(int flag, const cv::Mat &im, const int x0, const int x1)
 {
@@ -422,6 +429,12 @@ void Frame::ExtractORB(int flag, const cv::Mat &im, const int x0, const int x1)
         monoLeft = (*mpORBextractorLeft)(im,cv::Mat(),mvKeys,mDescriptors,vLapping);
     else
         monoRight = (*mpORBextractorRight)(im,cv::Mat(),mvKeysRight,mDescriptorsRight,vLapping);
+    // Visualize keypoints
+    if (flag == 0) {
+        visualizeKeypoints(im, mvKeys, "Left Image Keypoints");
+    } else {
+        visualizeKeypoints(im, mvKeysRight, "Right Image Keypoints");
+    }
 }
 
 bool Frame::isSet() const {

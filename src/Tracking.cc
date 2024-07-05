@@ -2490,7 +2490,8 @@ void Tracking::MonocularInitialization()
         // Find correspondences
         ORBmatcher matcher(0.9,true);
         int nmatches = matcher.SearchForInitialization(mInitialFrame,mCurrentFrame,mvbPrevMatched,mvIniMatches,100);
-
+        Verbose::PrintMess("Init Keypoints: " + to_string(mInitialFrame.mvKeys.size()) + ", Cur Keypoints: " + to_string(mCurrentFrame.mvKeys.size()), Verbose::VERBOSITY_QUIET);
+        Verbose::PrintMess("Tried Initialization matchings " + to_string(nmatches), Verbose::VERBOSITY_QUIET);
         // Check if there are enough correspondences
         if(nmatches<100)
         {
@@ -2511,6 +2512,7 @@ void Tracking::MonocularInitialization()
                     nmatches--;
                 }
             }
+            Verbose::PrintMess("Actual matchings " + to_string(nmatches), Verbose::VERBOSITY_QUIET);
 
             // Set Frame Poses
             mInitialFrame.SetPose(Sophus::SE3f());
