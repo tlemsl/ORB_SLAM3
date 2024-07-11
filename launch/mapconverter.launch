@@ -1,0 +1,5 @@
+<launch>
+    <!-- Node to run ORB_SLAM3 map_converter -->
+    <node name="map_converter_node" pkg="ORB_SLAM3" type="map_converter" output="screen" 
+          args="$(find ORB_SLAM3)/Vocabulary/ORBvoc.txt $(find ORB_SLAM3)/ZED2.yaml" launch-prefix="gdb -ex run --args"/>
+</launch>

@@ -59,6 +59,7 @@ find_package(Pangolin REQUIRED)
 find_package(realsense2)
 
 include_directories(
+   ${catkin_INCLUDE_DIRS}
    ${PROJECT_SOURCE_DIR}
    ${PROJECT_SOURCE_DIR}/include
    ${PROJECT_SOURCE_DIR}/include/CameraModels
@@ -85,7 +86,7 @@ if(realsense2_FOUND)
     )
 endif()
 
-add_executable(${PROJECT_NAME}_node
+add_library(${PROJECT_NAME}
    src/System.cc
    src/Tracking.cc
    src/LocalMapping.cc
@@ -144,16 +145,35 @@ add_executable(${PROJECT_NAME}_node
    include/SerializationUtils.h
    include/Config.h
    include/Settings.h
+)
+target_link_libraries(${PROJECT_NAME}
+   ${LIBS} 
+)
+
+add_executable(stereo_inertial
+   src/ros_stereo_inertial.cc
+)
+add_executable(stereo
    src/ros_stereo.cc
 )
-target_link_libraries(${PROJECT_NAME}_node
-   ${LIBS} ${catkin_LIBRARIES}
+add_executable(map_converter
+   src/Mapconverter.cc
 )
 
+target_link_libraries(stereo_inertial
+   ${catkin_LIBRARIES} ${PROJECT_NAME}
+)
+target_link_libraries(stereo
+   ${catkin_LIBRARIES} ${PROJECT_NAME}
+)
+
+target_link_libraries(map_converter
+   ${catkin_LIBRARIES} ${PROJECT_NAME}
+)
 
 # If RealSense SDK is found the library is added and its examples compiled
-if(realsense2_FOUND)
-   target_link_libraries(${PROJECT_NAME}_node
-    ${realsense2_LIBRARY}
-    )
-endif()
+# if(realsense2_FOUND)
+#    target_link_libraries(${PROJECT_NAME}_node
+#     ${realsense2_LIBRARY}
+#     )
+# endif()
