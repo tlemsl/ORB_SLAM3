@@ -66,8 +66,8 @@ Eigen::Matrix4f getPlaneTransformation(const Eigen::Vector3f& normal, const Eige
     return T;
 }
 
-Eigen::Vector3f normal(0.00846484,  -0.943085,   0.332444);
-Eigen::Vector3f center(2.36297, -0.828457,  -2.47375);
+Eigen::Vector3f normal(-0.010158,  0.950995,  -0.30904);
+Eigen::Vector3f center(-1.31122, -0.623707,   -1.9179);
 Eigen::Matrix4f T_P_R = getPlaneTransformation(normal, center).inverse();
 ros::Publisher marker_pub;
 
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
         //     continue;
         
         ros::Time current_time = ros::Time::now();
-        Sophus::SE3f pose = Sophus::SE3f(T_P_R*igb.mCurrentPose.matrix());
+        Sophus::SE3f pose = Sophus::SE3f(T_P_R*igb.mCurrentPose.inverse().matrix());
         Eigen::Vector3f translation = pose.translation();
         Eigen::Quaternion quaternion = pose.unit_quaternion();
 
@@ -234,7 +234,7 @@ void slam_visualizer(ORB_SLAM3::System &system){
     ros::Rate rate(5.0); // Publish rate: 10 Hz
     ORB_SLAM3::Atlas* patlas = system.GetAtlas();
     while (ros::ok()) {
-        cout << system.GetTrackingState() << endl;
+        // cout << system.GetTrackingState() << endl;
         if (system.GetTrackingState() <2 || system.GetTrackingState() > 5){
             rate.sleep();
             continue;

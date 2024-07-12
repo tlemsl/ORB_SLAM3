@@ -116,5 +116,5 @@ Viewer.ViewpointY: -0.7
 Viewer.ViewpointZ: -1.8
 Viewer.ViewpointF: 500.0
 
-System.LoadAtlasFromFile: "ZED2_stereo"
-# System.SaveAtlasToFile: "ZED2_stereo"
+System.LoadAtlasFromFile: "ZED2_stereo_room_merged"
+System.SaveAtlasToFile: "ZED2_stereo_room_merged2"
