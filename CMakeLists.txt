@@ -57,6 +57,8 @@ catkin_package(
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
 find_package(realsense2)
+find_package(yaml-cpp REQUIRED)
+
 
 include_directories(
    ${catkin_INCLUDE_DIRS}
@@ -66,6 +68,7 @@ include_directories(
    ${PROJECT_SOURCE_DIR}/Thirdparty/Sophus
    ${EIGEN3_INCLUDE_DIR}
    ${Pangolin_INCLUDE_DIRS}
+   ${YAML_CPP_INCLUDE_DIRS}
 )
 
 set(LIBS 
@@ -78,6 +81,7 @@ set(LIBS
   -lboost_serialization
   -lcrypto
   -lpthread 
+  yaml-cpp
 )
 # If RealSense SDK is found the library is added and its examples compiled
 if(realsense2_FOUND)
@@ -150,25 +154,42 @@ target_link_libraries(${PROJECT_NAME}
    ${LIBS} 
 )
 
-add_executable(stereo_inertial
-   src/ros_stereo_inertial.cc
+add_library(ROS_lib
+   src/ROSHandler.cc
 )
+
+target_link_libraries(ROS_lib
+   ${PROJECT_NAME}
+   ${catkin_LIBRARIES} 
+)
+
+add_library(Convert_lib
+   src/MapConverter.cc
+)
+
+target_link_libraries(
+   ${PROJECT_NAME}
+)
+
+# add_executable(stereo_inertial
+#    src/ros_stereo_inertial.cc
+# )
 add_executable(stereo
    src/ros_stereo.cc
 )
 add_executable(map_converter
-   src/Mapconverter.cc
+   src/Convert_node.cc
 )
 
-target_link_libraries(stereo_inertial
-   ${catkin_LIBRARIES} ${PROJECT_NAME}
-)
+# target_link_libraries(stereo_inertial
+#    ${catkin_LIBRARIES} ${PROJECT_NAME}
+# )
 target_link_libraries(stereo
-   ${catkin_LIBRARIES} ${PROJECT_NAME}
+   ROS_lib Convert_lib ${PROJECT_NAME}
 )
 
 target_link_libraries(map_converter
-   ${catkin_LIBRARIES} ${PROJECT_NAME}
+   ROS_lib Convert_lib ${PROJECT_NAME}
 )
 
 # If RealSense SDK is found the library is added and its examples compiled

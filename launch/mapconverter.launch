@@ -1,5 +1,15 @@
 <launch>
+<param name="file_directory" type="string" value="$(arg file_directory)" />
+    
+    <node name="plane_extractor_node" pkg="your_package_name" type="plane_extractor" output="screen">
+        <rosparam>
+            file_directory: $(arg file_directory)
+        </rosparam>
+    </node>
     <!-- Node to run ORB_SLAM3 map_converter -->
     <node name="map_converter_node" pkg="ORB_SLAM3" type="map_converter" output="screen" 
-          args="$(find ORB_SLAM3)/Vocabulary/ORBvoc.txt $(find ORB_SLAM3)/ZED2.yaml" launch-prefix="gdb -ex run --args"/>
+          args="$(find ORB_SLAM3)/Vocabulary/ORBvoc.txt $(find ORB_SLAM3)/config/ZED2.yaml" launch-prefix="gdb -ex run --args">
+
+
+    </node>
 </launch>
