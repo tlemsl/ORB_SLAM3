@@ -24,13 +24,13 @@ cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j24
 
-# cd ../../../
+cd ../../../
 
-# echo "Uncompress vocabulary ..."
+echo "Uncompress vocabulary ..."
 
-# cd Vocabulary
-# tar -xf ORBvoc.txt.tar.gz
-# cd ..
+cd Vocabulary
+tar -xf ORBvoc.txt.tar.gz
+cd ..
 
 # echo "Configuring and building ORB_SLAM3 ..."
 

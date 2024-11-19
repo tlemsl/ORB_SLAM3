@@ -20,7 +20,7 @@
 #include "ORBmatcher.h"
 
 #include<limits.h>
-
+#include <iostream>
 #include<opencv2/core/core.hpp>
 
 #include "Thirdparty/DBoW2/DBoW2/FeatureVector.h"
@@ -28,7 +28,47 @@
 #include<stdint-gcc.h>
 
 using namespace std;
+void VisualizeORBMatching(const cv::Mat &img1, const cv::Mat &img2, 
+                          const std::vector<cv::KeyPoint> &keypoints1, 
+                          const std::vector<cv::KeyPoint> &keypoints2, 
+                          const std::vector<int> &matches12) 
+{    std::cout << img1.cols <<", "<<img2.cols<<", "<<img1.rows<<", "<<img2.rows   << std::endl;
 
+    if(img1.cols == 0 || img2.cols == 0) {
+        return;
+    }
+    // Create an output image to display matches
+    cv::Mat imgMatches;
+
+    cv::hconcat(img1, img2, imgMatches);
+
+    // Offset for the second image in concatenated view
+    int offsetX = img1.cols;
+
+
+    for (size_t i = 0; i < matches12.size(); ++i) 
+    {
+        int matchIdx = matches12[i];
+        if (matchIdx < 0) 
+            continue; // Skip unmatched keypoints
+
+        // Keypoints from F1 and F2
+        const cv::Point2f &pt1 = keypoints1[i].pt;
+        const cv::Point2f &pt2 = keypoints2[matchIdx].pt;
+
+        // Draw keypoints
+        cv::circle(imgMatches, pt1, 4, cv::Scalar(0, 255, 0), -1); // Green for img1
+        cv::circle(imgMatches, cv::Point2f(pt2.x + offsetX, pt2.y), 4, cv::Scalar(255, 0, 0), -1); // Blue for img2
+
+        // Draw line connecting matches
+        cv::line(imgMatches, pt1, cv::Point2f(pt2.x + offsetX, pt2.y), cv::Scalar(0, 255, 255), 1);
+    }
+
+    // Display the results
+
+    cv::imshow("ORB Matching", imgMatches);
+    cv::waitKey(1); // Wait for a key press
+}
 namespace ORB_SLAM3
 {
 
@@ -758,6 +798,7 @@ namespace ORB_SLAM3
         for(size_t i1=0, iend1=vnMatches12.size(); i1<iend1; i1++)
             if(vnMatches12[i1]>=0)
                 vbPrevMatched[i1]=F2.mvKeysUn[vnMatches12[i1]].pt;
+        // VisualizeORBMatching(F1.imgLeft, F2.imgLeft, F1.mvKeysUn, F2.mvKeysUn, vnMatches12);
 
         return nmatches;
     }

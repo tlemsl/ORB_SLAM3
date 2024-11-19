@@ -2493,7 +2493,7 @@ void Tracking::MonocularInitialization()
         Verbose::PrintMess("Init Keypoints: " + to_string(mInitialFrame.mvKeys.size()) + ", Cur Keypoints: " + to_string(mCurrentFrame.mvKeys.size()), Verbose::VERBOSITY_QUIET);
         Verbose::PrintMess("Tried Initialization matchings " + to_string(nmatches), Verbose::VERBOSITY_QUIET);
         // Check if there are enough correspondences
-        if(nmatches<100)
+        if(nmatches<40)
         {
             mbReadyToInitializate = false;
             return;

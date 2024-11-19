@@ -177,6 +177,9 @@ target_link_libraries(
 add_executable(stereo
    src/ros_stereo.cc
 )
+add_executable(mono
+   src/ros_mono.cc
+)
 add_executable(map_converter
    src/Convert_node.cc
 )
@@ -185,6 +188,9 @@ add_executable(map_converter
 #    ${catkin_LIBRARIES} ${PROJECT_NAME}
 # )
 target_link_libraries(stereo
+   ROS_lib Convert_lib ${PROJECT_NAME}
+)
+target_link_libraries(mono
    ROS_lib Convert_lib ${PROJECT_NAME}
 )
 
