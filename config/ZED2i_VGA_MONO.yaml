@@ -43,14 +43,14 @@ Stereo.T_c1_c2: !!opencv-matrix
 
 # Overlapping area between images (to be updated)
 Camera1.overlappingBegin: 0
-Camera1.overlappingEnd: 336
+Camera1.overlappingEnd: 960
 
 Camera2.overlappingBegin: 0
-Camera2.overlappingEnd: 336
+Camera2.overlappingEnd: 960
 
 # Camera resolution
-Camera.width: 336
-Camera.height: 188
+Camera.width: 960
+Camera.height: 540
 
 # Camera frames per second 
 Camera.fps: 30

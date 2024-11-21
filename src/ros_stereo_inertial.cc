@@ -76,27 +76,27 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "Stereo_Inertial");
   ros::NodeHandle n("~");
   ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
-  bool bEqual = false;
-  if(argc < 4 || argc > 5)
-  {
-    cerr << endl << "Usage: rosrun ORB_SLAM3 Stereo_Inertial path_to_vocabulary path_to_settings do_rectify [do_equalize]" << endl;
-    ros::shutdown();
-    return 1;
-  }
+  // bool bEqual = false;
+  // if(argc < 4 || argc > 5)
+  // {
+  //   cerr << endl << "Usage: rosrun ORB_SLAM3 Stereo_Inertial path_to_vocabulary path_to_settings do_rectify [do_equalize]" << endl;
+  //   ros::shutdown();
+  //   return 1;
+  // }
 
-  std::string sbRect(argv[3]);
-  if(argc==5)
-  {
-    std::string sbEqual(argv[4]);
-    if(sbEqual == "true")
-      bEqual = true;
-  }
+  // std::string sbRect(argv[3]);
+  // if(argc==5)
+  // {
+  //   std::string sbEqual(argv[4]);
+  //   if(sbEqual == "true")
+  //     bEqual = true;
+  // }
 
   // Create SLAM system. It initializes all system threads and gets ready to process frames.
   ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::IMU_STEREO,true);
 
   ImuGrabber imugb;
-  ImageGrabber igb(&SLAM,&imugb,sbRect == "true",bEqual);
+  ImageGrabber igb(&SLAM,&imugb, false, false);
   
     // if(igb.do_rectify)
     // {      
@@ -138,9 +138,9 @@ int main(int argc, char **argv)
     // }
 
   // Maximum delay, 5 seconds
-  ros::Subscriber sub_imu = n.subscribe("/imu", 1000, &ImuGrabber::GrabImu, &imugb); 
-  ros::Subscriber sub_img_left = n.subscribe("/camera/left/image_raw", 100, &ImageGrabber::GrabImageLeft,&igb);
-  ros::Subscriber sub_img_right = n.subscribe("/camera/right/image_raw", 100, &ImageGrabber::GrabImageRight,&igb);
+  ros::Subscriber sub_imu = n.subscribe("/zed2i/zed_node/imu/data", 1000, &ImuGrabber::GrabImu, &imugb); 
+  ros::Subscriber sub_img_left = n.subscribe("/zed2i/zed_node/left_raw/image_raw_gray", 100, &ImageGrabber::GrabImageLeft,&igb);
+  ros::Subscriber sub_img_right = n.subscribe("/zed2i/zed_node/right_raw/image_raw_gray", 100, &ImageGrabber::GrabImageRight,&igb);
 
   std::thread sync_thread(&ImageGrabber::SyncWithImu,&igb);
 

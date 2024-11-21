@@ -177,6 +177,9 @@ target_link_libraries(
 add_executable(stereo
    src/ros_stereo.cc
 )
+add_executable(stereo_inertial
+   src/ros_stereo_inertial.cc
+)
 add_executable(mono
    src/ros_mono.cc
 )
@@ -193,7 +196,9 @@ target_link_libraries(stereo
 target_link_libraries(mono
    ROS_lib Convert_lib ${PROJECT_NAME}
 )
-
+target_link_libraries(stereo_inertial
+   ROS_lib Convert_lib ${PROJECT_NAME}
+)
 target_link_libraries(map_converter
    ROS_lib Convert_lib ${PROJECT_NAME}
 )

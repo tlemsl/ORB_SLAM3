@@ -54,13 +54,14 @@ int main(int argc, char **argv)
     std::string settings_path;
     std::string file_path;
 
-    bool visualize;
+    bool visualize = true;
     
 
     // Retrieve parameters from the parameter server
-    if (!nh.getParam("vocabulary_path", vocabulary_path) ||
-        !nh.getParam("settings_path", settings_path) ||
-        !nh.getParam("visualize", visualize))
+    // if (!nh.getParam("vocabulary_path", vocabulary_path) ||
+    //     !nh.getParam("settings_path", settings_path) ||
+    //     !nh.getParam("visualize", visualize))
+    if(argc != 4)
     {
         ROS_ERROR("Failed to get parameters. Usage: rosrun ORB_SLAM3 Stereo _vocabulary_path:=path_to_vocabulary _settings_path:=path_to_settings _do_rectify:=true/false");
         ros::shutdown();
@@ -68,12 +69,12 @@ int main(int argc, char **argv)
     }
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(vocabulary_path, settings_path, ORB_SLAM3::System::STEREO, visualize);
+    ORB_SLAM3::System SLAM(argv[1], argv[2], ORB_SLAM3::System::STEREO, visualize);
     ImageGrabber igb(&SLAM);
     igb.do_rectify = false;
 
-    message_filters::Subscriber<sensor_msgs::Image> left_sub(nh, "/camera/left/image_raw", 1);
-    message_filters::Subscriber<sensor_msgs::Image> right_sub(nh, "/camera/right/image_raw", 1);
+    message_filters::Subscriber<sensor_msgs::Image> left_sub(nh, "/zed2i/zed_node/left_raw/image_raw_gray", 1);
+    message_filters::Subscriber<sensor_msgs::Image> right_sub(nh, "/zed2i/zed_node/right_raw/image_raw_gray", 1);
     typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, sensor_msgs::Image> sync_pol;
     message_filters::Synchronizer<sync_pol> sync(sync_pol(10), left_sub,right_sub);
     sync.registerCallback(boost::bind(&ImageGrabber::GrabStereo,&igb,_1,_2));

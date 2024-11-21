@@ -8,45 +8,45 @@ File.version: "1.0"
 Camera.type: "PinHole"
 
 # Left Camera calibration and distortion parameters (OpenCV)
-Camera1.fx: 501.5339583084979
-Camera1.fy: 499.21534683693807
-Camera1.cx: 487.882700425182 
-Camera1.cy: 264.1706400682822
+Camera1.fx: 141.91207558997834
+Camera1.fy: 141.859974124345
+Camera1.cx: 163.32755799726402
+Camera1.cy: 92.74057160125506
 
 # distortion parameters
-Camera1.k1: -0.028186241190578692 
-Camera1.k2: 0.017404512191551674
-Camera1.p1: -0.0015435256634181572
-Camera1.p2: -0.004205123883372731
+Camera1.k1: -0.059763063867239015
+Camera1.k2: 0.02245361844814379
+Camera1.p1: -0.0015313555346179687
+Camera1.p2: 0.0014249648021982895
 
 # Right Camera calibration and distortion parameters (OpenCV)
-Camera2.fx: 503.187195910098
-Camera2.fy: 502.5952785049678
-Camera2.cx: 488.91641037549624
-Camera2.cy: 266.28724208200714
+Camera2.fx: 141.91207558997834
+Camera2.fy: 141.859974124345
+Camera2.cx: 163.32755799726402
+Camera2.cy: 92.74057160125506
 
 # distortion parameters
-Camera2.k1: -0.04078614871347336
-Camera2.k2: 0.013853547225536044
-Camera2.p1: -0.0007901542717562483
-Camera2.p2: -0.0032538255889693443
+Camera2.k1: -0.059763063867239015
+Camera2.k2: 0.02245361844814379
+Camera2.p1: -0.0015313555346179687
+Camera2.p2: 0.0014249648021982895
     
 # Transformation matrix from right camera to left camera
 Stereo.T_c1_c2: !!opencv-matrix
   rows: 4
   cols: 4
   dt: f
-  data: [ 0.99997655, 0.00033931, 0.00683997, 0.11705496,
-          -0.00036066, 0.99999507, 0.00312027, 0.00019689,
+  data: [ 0.99997655, 0.00033931, 0.00683997, 0.12001843,
+          -0.00036066, 0.99999507, 0.00312027,  -0.0000077,
           -0.00683888, -0.00312266, 0.99997174, -0.00332633,
           0.0,         0.0,         0.0,        1.0]
 
 # Overlapping area between images (to be updated)
 Camera1.overlappingBegin: 0
-Camera1.overlappingEnd: 336
+Camera1.overlappingEnd: 960
 
 Camera2.overlappingBegin: 0
-Camera2.overlappingEnd: 336
+Camera2.overlappingEnd: 960
 
 # Camera resolution
 Camera.width: 336
@@ -70,16 +70,17 @@ IMU.T_b_c1: !!opencv-matrix
    rows: 4
    cols: 4
    dt: f
-   data: [ 0.06159749, -0.00539653, 0.99808648, -0.00183001, 
-          -0.99563516, 0.06991696, 0.06182424, 0.00526778, 
-          -0.07011681, -0.99753822, -0.00106627, 0.00138844,
-           0., 0., 0., 1. ]
+   data: [ 0.036105853, 0.004721243, 0.999336819, 0.002431559,
+          -0.999330928, -0.005669635, 0.036132426, -0.020677447,
+          0.005836465, -0.999972782, 0.004513377, -0.003831893,
+          0.0, 0.0, 0.0, 1.0]
+
 
 # IMU noise
-IMU.NoiseGyro: 0.13665520491400387  # 1.6968e-04 
-IMU.NoiseAcc: 1.102544244729265 # 2.0000e-3
-IMU.GyroWalk: 2.66e-05
-IMU.AccWalk: 0.000433 # 3.0000e-3
+IMU.NoiseGyro: 0.05067296223017242  # Gyroscope noise density
+IMU.NoiseAcc: 0.25713221331271446   # Accelerometer noise density
+IMU.GyroWalk: 0.0648427598008084    # Gyroscope random walk
+IMU.AccWalk: 0.32913431324293174    # Accelerometer random walk
 IMU.Frequency: 200.0
 
 #--------------------------------------------------------------------------------------------

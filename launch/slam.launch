@@ -1,4 +1,4 @@
 <launch>
-    <node name="ORB_SLAM3_node" pkg="ORB_SLAM3" type="stereo" output="screen"
-          args="$(find ORB_SLAM3)/Vocabulary/ORBvoc.txt $(find ORB_SLAM3)/ZED2.yaml false" launch-prefix="gdb -ex run --args"/>
+    <node name="ORB_SLAM3_node" pkg="ORB_SLAM3" type="stereo_inertial" output="screen"
+          args="$(find ORB_SLAM3)/Vocabulary/ORBvoc.txt $(find ORB_SLAM3)/config/ZED2i_VGA.yaml false"/>
 </launch>
