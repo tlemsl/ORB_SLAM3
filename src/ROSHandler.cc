@@ -47,6 +47,16 @@ void ImageGrabber::GrabStereo(const sensor_msgs::ImageConstPtr &msgLeft, const s
     {
         mCurrentPose = mpSLAM->TrackStereo(cv_ptrLeft->image, cv_ptrRight->image, cv_ptrLeft->header.stamp.toSec());
     }
+
+    ros::Time current_time = ros::Time::now();
+    double time_diff = (current_time - last_tracking_time).toSec();
+    float frequency = 1.0 / time_diff;  // Convert to Hz
+    
+    std_msgs::Float32 freq_msg;
+    freq_msg.data = frequency;
+    tracking_time_pub.publish(freq_msg);
+    
+    last_tracking_time = current_time;
 }
 
 cv::Mat ImageGrabber::GetImage(const sensor_msgs::ImageConstPtr &img_msg)
@@ -94,6 +104,7 @@ void StereoInertialGrabber::GrabImageRight(const sensor_msgs::ImageConstPtr &img
 void StereoInertialGrabber::SyncWithImu()
 {
     const double maxTimeDiff = 0.01;
+
     while(true)
     {
         cv::Mat imLeft, imRight;
@@ -175,9 +186,17 @@ void StereoInertialGrabber::SyncWithImu()
                 {
                     mCurrentPose = mpSLAM->TrackStereo(imLeft,imRight,tImLeft,vImuMeas);
                 }
+                ros::Time current_time = ros::Time::now();
+                double time_diff = (current_time - last_tracking_time).toSec();
+                float frequency = 1.0 / time_diff;  // Convert to Hz
+                std::cout << "Frequency: " << frequency << std::endl;
+                std_msgs::Float32 freq_msg;
+                freq_msg.data = frequency;
+                tracking_time_pub.publish(freq_msg);
+                
+                last_tracking_time = current_time;
             }
         }
-
         std::chrono::milliseconds tSleep(1);
         std::this_thread::sleep_for(tSleep);
     }
@@ -331,7 +350,7 @@ void ROSPublisher::publish_pose(Eigen::Vector3f translation, Sophus::SE3f pose) 
 } 
 
 void ROSPublisher::run() {
-    ros::Rate rate(10.0); // Publish rate: 10 Hz
+    ros::Rate rate(30.0); // Publish rate: 10 Hz
     while (ros::ok()) {
         Sophus::SE3f pose = Sophus::SE3f(mT_P_R*mpImageGrabber->mCurrentPose.inverse().matrix());
         Eigen::Vector3f translation = pose.translation();
@@ -343,7 +362,7 @@ void ROSPublisher::run() {
 }
 
 void ROSPublisher::visualize() {
-    ros::Rate rate(1); // Publish rate: 10 Hz
+    ros::Rate rate(3); // Publish rate: 10 Hz
     while (ros::ok()) {
         publish_markers();
         rate.sleep();

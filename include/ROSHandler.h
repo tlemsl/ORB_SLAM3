@@ -8,6 +8,7 @@
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/Imu.h>
 #include "System.h"
+#include <std_msgs/Float32.h>
 
 // Base ImageGrabber class for stereo
 class ImageGrabber
@@ -18,6 +19,11 @@ public:
         mCurrentPose = Sophus::SE3f();
         if(mbClahe)
             mClahe = cv::createCLAHE(3.0, cv::Size(8, 8));
+        
+        // Initialize the tracking frequency publisher
+        ros::NodeHandle nh;
+        tracking_time_pub = nh.advertise<std_msgs::Float32>("tracking_frequency", 10);
+        last_tracking_time = ros::Time::now();
     }
 
     virtual void GrabStereo(const sensor_msgs::ImageConstPtr &msgLeft, const sensor_msgs::ImageConstPtr &msgRight);
@@ -29,6 +35,8 @@ public:
     bool mbClahe;
     cv::Ptr<cv::CLAHE> mClahe;
     Sophus::SE3f mCurrentPose;
+    ros::Publisher tracking_time_pub;
+    ros::Time last_tracking_time;
 };
 
 // IMU Grabber class
